@@ -202,13 +202,12 @@ module.
 
 ## Notes
 
-- The ADK requires a working internet connection to access
-  underlying LLMs (Gemini, GPT‑4, etc.) if you choose to use
-  model‑based agents instead of the simplified agents in this
-  demo.  See the ADK documentation for authentication details.
-- Keep your `config.json` confidential.  Do not commit real
-  credentials to version control.
-- This project is a starting point; you are encouraged to add
+- This project is a starting point, we can add
   more sophisticated anomaly detection, compliance policies,
   repair logic, and integration with messaging or ticketing
   systems.
+
+---
+
+
+<p align="center">Crafted with Love, purpose, and a hawk’s eye — Purvansh Singh</strong></p>
