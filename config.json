@@ -1,0 +1,25 @@
+{
+  "aws": {
+    "access_key_id": "YOUR_AWS_ACCESS_KEY_ID",
+    "secret_access_key": "YOUR_AWS_SECRET_ACCESS_KEY",
+    "region": "YOUR_AWS_REGION",
+    "s3_bucket": "YOUR_S3_BUCKET_NAME"
+  },
+  "azure": {
+    "connection_string": "YOUR_AZURE_STORAGE_CONNECTION_STRING",
+    "container": "YOUR_AZURE_CONTAINER_NAME"
+  },
+  "gcp": {
+    "project_id": "YOUR_GCP_PROJECT_ID",
+    "credentials_file": "path/to/your-service-account.json",
+    "bucket": "YOUR_GCS_BUCKET_NAME"
+  },
+  "data": {
+    "baseline_file": "data/transactions_baseline.csv",
+    "current_file": "data/transactions_current.csv"
+  },
+  "llm": {
+    "google_api_key": "",
+    "model_name": "gemini-2.0-flash"
+  }
+}

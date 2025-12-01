@@ -1,0 +1,68 @@
+{
+  "timestamp": "2025-12-01T17:52:55.650497",
+  "profile": {
+    "num_rows": 510,
+    "columns": {
+      "transaction_id": {
+        "dtype": "int64",
+        "num_missing": 0,
+        "mean": 250.31764705882352,
+        "std": 144.90057929664695,
+        "min": 1.0,
+        "max": 500.0
+      },
+      "product_id": {
+        "dtype": "int64",
+        "num_missing": 0,
+        "mean": 149.10196078431372,
+        "std": 29.45832853235013,
+        "min": 100.0,
+        "max": 199.0
+      },
+      "region": {
+        "dtype": "object",
+        "num_missing": 0
+      },
+      "unit_price": {
+        "dtype": "float64",
+        "num_missing": 0,
+        "mean": 45.13811764705882,
+        "std": 9.7324966601366,
+        "min": 22.494,
+        "max": 62.69
+      },
+      "quantity": {
+        "dtype": "int64",
+        "num_missing": 0,
+        "mean": 2.966666666666667,
+        "std": 1.7065880282308472,
+        "min": 0.0,
+        "max": 8.0
+      },
+      "transaction_date": {
+        "dtype": "object",
+        "num_missing": 0
+      },
+      "customer_email": {
+        "dtype": "object",
+        "num_missing": 0
+      },
+      "discount": {
+        "dtype": "float64",
+        "num_missing": 0,
+        "mean": 0.14882352941176472,
+        "std": 0.1104935713412981,
+        "min": 0.0,
+        "max": 0.3
+      }
+    }
+  },
+  "anomalies": [
+    "Schema drift detected: added columns ['discount', 'unit_price']",
+    "Schema drift detected: missing columns ['price']",
+    "10 duplicate records detected"
+  ],
+  "compliance_issues": [],
+  "cleaned_path": "data/transactions_current_cleaned.csv",
+  "lineage": "Lineage graph placeholder: baseline.csv \u2192 current.csv \u2192 cleaned.csv"
+}
