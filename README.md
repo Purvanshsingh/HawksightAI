@@ -9,6 +9,9 @@ governance report.  The code in this repository is organised
 into logical modules for agents, tools, configuration, and data
 generation.
 
+<img width="518" height="357" alt="image" src="https://github.com/user-attachments/assets/c2afdd0b-bcdc-4e8b-aba6-8cae86dfc861" />
+
+
 ## Project Structure
 
 ```
