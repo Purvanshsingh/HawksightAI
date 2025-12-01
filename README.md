@@ -1,45 +1,38 @@
 # HawkSightAI Project
 
-HawkSightAI is an end‑to‑end demonstration of an autonomous data
-governance platform built on the Google Agent Development Kit (ADK).
-It shows how a multi‑agent architecture can profile data,
-detect schema drift and anomalies, identify compliance issues,
-remediate duplicate records and other errors, and compile a
-governance report.  The code in this repository is organised
-into logical modules for agents, tools, configuration, and data
-generation.
+HawkSightAI is an end‑to‑end demonstration of an autonomous data governance platform built on the Google Agent Development Kit (ADK). It shows how a multi‑agent architecture can profile data, detect schema drift and anomalies, identify compliance issues, remediate duplicate records and other errors, and compile a governance report. The code in this repository is organised into logical modules for agents, tools, configuration, and data generation.
 
 <p align="center">
     <img width="518" height="357" alt="image" src="https://github.com/user-attachments/assets/c2afdd0b-bcdc-4e8b-aba6-8cae86dfc861" />
 </p>
 
+---
 
 ## Project Structure
 
 ```
 hawksightai_project/
-├── README.md                # This file
-├── config.json              # Configuration placeholders (credentials and data paths)
-├── hawksight_ai.py          # Main entry point to run the demo
+├── README.md                # Documentation
+├── config.json              # Configuration for data paths, storage, and LLM
+├── hawksight_ai.py          # Main entry point to run the workflow
 ├── agents/
-│   ├── __init__.py
-│   └── agents.py            # Definitions of ADK agents and orchestrator
+│   ├── __init__.py
+│   └── agents.py            # Agent definitions and orchestrator
 ├── tools/
-│   ├── __init__.py
-│   └── data_tools.py        # Profiling, anomaly detection, PII detection, etc.
+│   ├── __init__.py
+│   └── data_tools.py        # Profiling, anomaly detection, compliance checks, etc.
 └── data/
-    └── generate_data.py     # Script to generate synthetic datasets for demo
+    └── generate_data.py     # Script to generate synthetic datasets
 ```
+
+---
 
 ### `config.json`
 
-This JSON file holds credentials and paths used by the demo.  **It
-should never be committed with real secrets.**  Before running
-the demo you must update the placeholders with valid credentials
-for your own AWS S3, Azure Blob Storage, or Google Cloud Storage
-environments.  The `data` section points to the baseline and
-current files used for profiling and anomaly detection.  For
-example:
+This file contains configuration fields used during the run. If you are connecting to cloud storage, update the placeholders.
+For local testing, only the `data` and `llm` sections matter.
+
+Example:
 
 ```json
 {
@@ -69,18 +62,11 @@ example:
 }
 ```
 
-Update the fields to point to your own resources.  The demo does
-not directly connect to cloud buckets; instead it reads local
-files.  You can extend the data loading in `hawksight_ai.py` to
-fetch from cloud storage using these credentials if desired.
+> Do not commit real credentials.
 
-The `llm` section holds settings for the Gemini‑powered agents.  If
-you provide a valid `google_api_key` from Google AI Studio and
-specify a `model_name` (for example `gemini-2.0-flash` or
-`gemini-2.5-pro-preview-03-25`), the orchestrator will attempt to
-instantiate LLM agents via the ADK.  When the ADK is unavailable or
-you omit the key, the demo gracefully falls back to deterministic
-agents that do not invoke an LLM.
+The demo does not directly connect to cloud buckets; instead it reads local files. You can extend the data loading in hawksight_ai.py to fetch from cloud storage using these credentials if desired. The llm section holds settings for the Gemini‑powered agents. If you provide a valid google_api_key from Google AI Studio and specify a model_name (for example gemini-2.0-flash or gemini-2.5-pro-preview-03-25), the orchestrator will attempt to instantiate LLM agents via the ADK. When the ADK is unavailable or you omit the key, the demo gracefully falls back to deterministic agents that do not invoke an LLM.
+
+---
 
 ### `hawksight_ai.py`
 
@@ -108,9 +94,13 @@ tool functions manually.
 Contains definitions for specialized agents derived from
 `BaseAgent` and a helper function to build the orchestrator.
 These agents correspond to the roles defined in the HawkSightAI
-architecture: data profiling, drift and anomaly detection,
-compliance checking, data repair, and reporting.  The
-`create_eagle_agent()` function constructs a sequential
+architecture:
+- Profiling agent
+- Drift/anomaly detection agent
+- Compliance agent
+- Repair agent
+- Report agent
+The `create_eagle_agent()` function constructs a sequential
 agent that runs these sub‑agents in order.
 
 ### `tools/data_tools.py`
@@ -141,78 +131,52 @@ module.
 
 ## Setup Instructions
 
-1. **Install dependencies**.  Create a new virtual environment and
-   install the required libraries.  At a minimum, you need
-   `pandas` and `numpy` for the data tools.  To run the LLM agents,
-   you must also install the Google Agent Development Kit (ADK) and
-   optionally the Gemini client libraries:
+1. **Create environment & install dependencies**
 
    ```bash
    python -m venv .venv
-   source .venv/bin/activate  # or .venv\Scripts\activate on Windows
-   # Core libraries
+   source .venv/bin/activate   # Windows: .venv\Scripts\activate
    pip install pandas numpy
-   # Install the Python version of the Agent Development Kit
    pip install google-python-agent-sdk
-   # (Optional) Install google-generativeai if you plan to call Gemini
-   pip install google-generativeai
+   pip install google-generativeai   # Optional: only needed for Gemini agents
    ```
 
-   The `google-python-agent-sdk` package installs the ADK.  Without it,
-   the orchestrator will fall back to deterministic agents and will
-   not call the Gemini LLM.  The optional `google-generativeai` package
-   provides the underlying client library used by ADK to communicate
-   with Gemini.
+2. **Update configuration**
 
-2. **Configure secrets**.  Open `config.json` and replace the
-   placeholder values with your real AWS, Azure, or GCP
-   credentials and bucket/container names.  If you don’t use
-   cloud storage you can leave these fields unchanged.  Ensure
-   the `data` section points to your baseline and current CSV
-   files.
+   Edit `config.json` with file paths or credentials as needed.
 
-3. **Generate data (optional)**.  To generate synthetic data
-   matching the demo scenario, run:
+3. **Generate demo data (optional)**
 
    ```bash
    python data/generate_data.py
    ```
 
-   This will create `transactions_baseline.csv` and
-   `transactions_current.csv` under the `data` directory.
-
-4. **Run the demo**.  Execute the main script:
+4. **Run HawkSightAI**
 
    ```bash
    python hawksight_ai.py
    ```
 
-   The script profiles the baseline, then attempts to run a
-   sequential orchestrator.  If ADK and a valid Gemini API key are
-   available (see the `llm` section of `config.json`), the
-   orchestrator will use LLM agents to reason about the data and
-   coordinate tool use.  Otherwise it falls back to deterministic
-   agents.  Upon completion it writes a governance report to the
-   `data` directory summarizing detected anomalies, compliance
-   issues, and the location of the cleaned dataset.
+Once executed, the system creates:
 
-5. **Extend for real data**.  To integrate with real S3, Azure,
-   or GCS buckets, modify the data loading in
-   `hawksight_ai.py` to read from the respective services using
-   the credentials in `config.json`.  For example, you could
-   use `boto3` for S3, `azure-storage-blob` for Azure Blob
-   Storage, and `google-cloud-storage` for GCS.  After loading
-   into pandas DataFrames, pass them to the tools in the same
-   way as the local CSV files.
-
-## Notes
-
-- This project is a starting point, we can add
-  more sophisticated anomaly detection, compliance policies,
-  repair logic, and integration with messaging or ticketing
-  systems.
+* A governance JSON report
+* Detection summary
+* A cleaned dataset when duplicates were found
 
 ---
 
+## Notes
 
-<p align="center">Crafted with Love, purpose, and a hawk’s eye — Purvansh Singh</strong></p>
+This version is a foundation. Future additions may include:
+
+* Advanced anomaly scoring
+* Custom rule engines
+* Ticketing or messaging notifications
+* Lineage graph visualization
+* Integration with enterprise data platforms
+
+---
+
+<p align="center">Crafted with Love, purpose, and a hawk’s eye — <strong>Purvansh Singh</strong></p>
+
+---
